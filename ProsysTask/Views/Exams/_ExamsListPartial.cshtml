@@ -1,0 +1,28 @@
+﻿@model IEnumerable<Exam>
+
+<table class="table table-hover shadow rounded">
+    <thead>
+        <tr>
+            <th>Dərs Kodu</th>
+            <th>Şagird Nömrəsi</th>
+            <th>İmtahan Tarixi</th>
+            <th>Qiymət</th>
+            <th>Əməliyyatlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var exam in Model)
+        {
+            <tr>
+                <td>@exam.LessonCode</td>
+                <td>@exam.StudentNumber</td>
+                <td>@exam.ExamDate.ToShortDateString()</td>
+                <td>@exam.Score</td>
+                <td>
+                    <button class="btn btn-sm btn-primary edit-exam" data-lesson="@exam.LessonCode" data-student="@exam.StudentNumber">Redaktə</button>
+                    <button class="btn btn-sm btn-danger delete-exam" data-lesson="@exam.LessonCode" data-student="@exam.StudentNumber">Sil</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

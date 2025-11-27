@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Exam>
+
+@{
+    ViewData["Title"] = "İmtahanlar";
+}
+
+<h2 class="mb-4">İmtahanlar</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div id="examFormContainer">
+            @await Html.PartialAsync("_ExamFormPartial",new Exam())
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div id="examsList">
+            @await Html.PartialAsync("_ExamsListPartial", Model)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#examForm').submit(function(e){
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function(result){
+                        $('#examsList').html(result);
+                        $('#examForm')[0].reset();
+                    },
+                    error: function(){ alert('Xəta baş verdi!'); }
+                });
+            });
+
+            $(document).on('click', '.edit-exam', function(){
+                var lessonCode = $(this).data('lesson');
+                var studentNumber = $(this).data('student');
+                $.get('/Exams/Edit?lessonCode='+lessonCode+'&studentNumber='+studentNumber, function(formHtml){
+                    $('#examFormContainer').html(formHtml);
+                });
+            });
+
+            $(document).on('click', '.delete-exam', function(){
+                var lessonCode = $(this).data('lesson');
+                var studentNumber = $(this).data('student');
+                if(!confirm('Silmək istədiyinizə əminsiniz?')) return;
+                $.post('/Exams/DeleteConfirmed', { lessonCode: lessonCode, studentNumber: studentNumber }, function(result){
+                    $('#examsList').html(result);
+                });
+            });
+        });
+    </script>
+}

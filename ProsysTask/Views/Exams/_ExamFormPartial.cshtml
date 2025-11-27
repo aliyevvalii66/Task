@@ -1,0 +1,21 @@
+﻿@model Exam
+
+<form id="examForm" asp-action="Create" method="post">
+    <div class="mb-3">
+        <label>Dərs Kodu</label>
+        <input asp-for="LessonCode" class="form-control" maxlength="3" required />
+    </div>
+    <div class="mb-3">
+        <label>Şagird Nömrəsi</label>
+        <input asp-for="StudentNumber" type="number" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>İmtahan Tarixi</label>
+        <input asp-for="ExamDate" type="date" class="form-control" required />
+    </div>
+    <div class="mb-3">
+        <label>Qiymət</label>
+        <input asp-for="Score" type="number" min="0" max="9" class="form-control" required />
+    </div>
+    <button type="submit" class="btn btn-success">Yadda saxla</button>
+</form>

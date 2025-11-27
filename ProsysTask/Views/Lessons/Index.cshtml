@@ -1,0 +1,64 @@
+﻿@model IEnumerable<Lesson>
+<div id="lessonsList">
+    @{
+        await Html.RenderPartialAsync("_LessonsListPartial", Model);
+    }
+</div>
+
+<button class="btn btn-success" id="addLessonBtn">Yeni Dərs</button>
+
+<div id="lessonFormModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body" id="lessonFormContainer"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // Yeni dərs
+        $('#addLessonBtn').click(function(){
+            $.get('@Url.Action("Create")', function(data){
+                $('#lessonFormContainer').html(data);
+                $('#lessonFormModal').modal('show');
+            });
+        });
+
+        // Form submit
+        $(document).on('submit', '#lessonForm', function(e){
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function(data){
+                    $('#lessonsList').html(data);
+                    $('#lessonFormModal').modal('hide');
+                }
+            });
+        });
+
+        // Edit
+        $(document).on('click', '.edit-lesson', function(e){
+            e.preventDefault();
+            var id = $(this).data('id');
+            $.get('/Lessons/Edit/' + id, function(data){
+                $('#lessonFormContainer').html(data);
+                $('#lessonFormModal').modal('show');
+            });
+        });
+
+        // Delete
+        $(document).on('click', '.delete-lesson', function(e){
+            e.preventDefault();
+            if(!confirm('Dərsi silmək istədiyinizə əminsiniz?')) return;
+            var id = $(this).data('id');
+            $.post('/Lessons/DeleteConfirmed/' + id, function(data){
+                $('#lessonsList').html(data);
+            });
+        });
+    </script>
+}

@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Student>
+
+@{
+    ViewData["Title"] = "Şagirdlər";
+}
+
+<h2 class="mb-4">Şagirdlər</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        <div id="studentFormContainer">
+            @await Html.PartialAsync("_StudentFormPartial", new Student())
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div id="studentsList">
+            @await Html.PartialAsync("_StudentsListPartial", Model)
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#studentForm').submit(function (e) {
+                e.preventDefault();
+                var form = $(this);
+                $.ajax({
+                    url: form.attr('action'),
+                    type: 'POST',
+                    data: form.serialize(),
+                    success: function (result) {
+                        $('#studentsList').html(result);
+                        $('#studentForm')[0].reset();
+                    },
+                    error: function () {
+                        alert('Xəta baş verdi!');
+                    }
+                });
+            });
+
+            $(document).on('click', '.edit-student', function () {
+                var id = $(this).data('id');
+                $.get('/Students/Edit/' + id, function (formHtml) {
+                    $('#studentFormContainer').html(formHtml);
+                });
+            });
+
+            $(document).on('click', '.delete-student', function () {
+                if (!confirm('Silmək istədiyinizə əminsiniz?')) return;
+                var id = $(this).data('id');
+                $.post('/Students/DeleteConfirmed/' + id, function (result) {
+                    $('#studentsList').html(result);
+                });
+            });
+        });
+    </script>
+}
