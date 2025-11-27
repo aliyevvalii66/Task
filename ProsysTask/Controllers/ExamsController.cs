@@ -12,8 +12,8 @@ namespace ProsysTask.Controllers
         public async Task<IActionResult> Index()
         {
             var exams = await _context.Exams
-                //.Include(e => e.Student)
-                //.Include(e => e.Lesson)
+                .Include(e => e.Student)
+                .Include(e => e.Lesson)
                 .ToListAsync();
             return View(exams);
         }
@@ -48,8 +48,8 @@ namespace ProsysTask.Controllers
             {
                 _context.Add(exam);
                 await _context.SaveChangesAsync();
-                //var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
-                return PartialView("_ExamsListPartial"/*exams*/);
+                var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
+                return PartialView("_ExamsListPartial", exams);
             }
             catch (Exception ex)
             {
@@ -84,8 +84,8 @@ namespace ProsysTask.Controllers
             {
                 _context.Update(exam);
                 await _context.SaveChangesAsync();
-                //var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
-                return PartialView("_ExamsListPartial"/*, exams*/);
+                var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
+                return PartialView("_ExamsListPartial", exams);
             }
             catch (Exception ex)
             {
@@ -107,14 +107,14 @@ namespace ProsysTask.Controllers
                     _context.Exams.Remove(exam);
                     await _context.SaveChangesAsync();
                 }
-                //var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
-                return PartialView("_ExamsListPartial"/*, exams*/);
+                var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
+                return PartialView("_ExamsListPartial", exams);
             }
             catch (Exception ex)
             {
                 TempData["ErrorMessage"] = "Silmək mümkün olmadı: " + ex.Message;
-                //var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
-                return PartialView("_ExamsListPartial"/*, exams*/);
+                var exams = await _context.Exams.Include(e => e.Student).Include(e => e.Lesson).ToListAsync();
+                return PartialView("_ExamsListPartial", exams);
             }
         }
     }

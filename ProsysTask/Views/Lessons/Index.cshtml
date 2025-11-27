@@ -18,7 +18,6 @@
 @section Scripts {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
-        // Yeni dərs
         $('#addLessonBtn').click(function(){
             $.get('@Url.Action("Create")', function(data){
                 $('#lessonFormContainer').html(data);
@@ -26,7 +25,6 @@
             });
         });
 
-        // Form submit
         $(document).on('submit', '#lessonForm', function(e){
             e.preventDefault();
             var form = $(this);
@@ -41,7 +39,6 @@
             });
         });
 
-        // Edit
         $(document).on('click', '.edit-lesson', function(e){
             e.preventDefault();
             var id = $(this).data('id');
@@ -51,7 +48,6 @@
             });
         });
 
-        // Delete
         $(document).on('click', '.delete-lesson', function(e){
             e.preventDefault();
             if(!confirm('Dərsi silmək istədiyinizə əminsiniz?')) return;
